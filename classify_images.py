@@ -58,11 +58,20 @@ def classify_images(images_dir, results_dic, model):
                 --- where index 1 & index 2 are added by this function ---
                   NEW - index 1 = classifier label (string)
                   NEW - index 2 = 1/0 (int)  where 1 = match between pet image
-                    and classifer labels and 0 = no match between labels
+                    and classifier labels and 0 = no match between labels
       model - Indicates which CNN model architecture will be used by the 
               classifier function to classify the pet images,
               values must be either: resnet alexnet vgg (string)
      Returns:
            None - results_dic is mutable data type so no return needed.         
     """
-    None 
+
+    for key in results_dic:
+        model_label = classifier(images_dir + key, model)
+        model_label = model_label.lower().strip()
+        pet_label = results_dic[key][0]
+
+        if pet_label in model_label:
+            results_dic[key].extend([model_label, 1])
+        else:
+            results_dic[key].extend([model_label, 0])
